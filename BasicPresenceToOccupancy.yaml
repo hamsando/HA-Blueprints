@@ -1,6 +1,6 @@
 blueprint:
   name: Basic Presence to Occupancy
-  description: Combine single source presence to occupancy
+  description: Combine single source presence to occupancy v3
   domain: automation
   input:
     occupancy_sensor:
@@ -57,7 +57,7 @@ actions:
           data:
             qos: "2"
             retain: true
-            topic: home/virtual/!input mqtt_path/state
+            topic: {{myVar}}
             payload: "false"
     - conditions:
       - condition: state
@@ -81,6 +81,6 @@ actions:
           data:
             qos: "2"
             retain: true
-            topic: home/virtual/!input mqtt_path/state
+            topic: {{myVar}}
             payload: "false"
 mode: restart
