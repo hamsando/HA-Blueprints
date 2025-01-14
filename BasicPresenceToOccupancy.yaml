@@ -28,7 +28,8 @@ blueprint:
       description: Just the sensor iself (office_occupancy)
       selector:
         text:
-
+variables:
+  myVar: home/virtual/!input mqtt_path/state
 triggers:
   - trigger: state
     entity_id: !input main_light
@@ -67,7 +68,7 @@ actions:
           data:
             qos: "2"
             retain: true
-            topic: home/virtual/!input mqtt_path/state
+            topic: {{myVar}}
             payload: "true"
     - conditions:
       - condition: state
