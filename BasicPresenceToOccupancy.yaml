@@ -1,6 +1,6 @@
 blueprint:
   name: Basic Presence to Occupancy
-  description: Combine single source presence to occupancy v4
+  description: Combine single source presence to occupancy v5
   domain: automation
   input:
     occupancy_sensor:
@@ -24,14 +24,10 @@ blueprint:
       selector:
         duration:
     mqtt_path:
-      name: MQTT Item
-      description: Just the sensor iself (office_occupancy)
+      name: MQTT Path
+      description: For example - home/virtual/hoarding_occupancy/state
       selector:
         text:
-variables:
-  myVarA: home/virtual/
-  myVarB: !input mqtt_path
-  myVarC: /state
 triggers:
   - trigger: state
     entity_id: !input main_light
@@ -59,7 +55,7 @@ actions:
           data:
             qos: "2"
             retain: true
-            topic: '{{ myVarA myVarB myVarC }}'
+            topic: !input mqtt_path
             payload: "false"
     - conditions:
       - condition: state
@@ -70,7 +66,7 @@ actions:
           data:
             qos: "2"
             retain: true
-            topic: '{{ myVarA myVarB myVarC }}'
+            topic: !input mqtt_path
             payload: "true"
     - conditions:
       - condition: state
@@ -83,6 +79,6 @@ actions:
           data:
             qos: "2"
             retain: true
-            topic: '{{ myVarA myVarB myVarC }}'
+            topic: !input mqtt_path
             payload: "false"
 mode: restart
