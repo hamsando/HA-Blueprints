@@ -75,9 +75,7 @@ actions:
         state: "off"
       sequence:
         - delay:
-            hours: !input off_smoothing_delay.hours
-            minutes: !input off_smoothing_delay.minutes
-            seconds: !input off_smoothing_delay.seconds
+            !input off_smoothing_delay
         - action: mqtt.publish
           data:
             qos: "2"
