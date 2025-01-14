@@ -57,7 +57,7 @@ actions:
           data:
             qos: "2"
             retain: true
-            topic: {{myVar}}
+            topic: '{{ myVar }}'
             payload: "false"
     - conditions:
       - condition: state
@@ -68,7 +68,7 @@ actions:
           data:
             qos: "2"
             retain: true
-            topic: {{myVar}}
+            topic: '{{ myVar }}'
             payload: "true"
     - conditions:
       - condition: state
@@ -81,6 +81,6 @@ actions:
           data:
             qos: "2"
             retain: true
-            topic: {{myVar}}
+            topic: '{{ myVar }}'
             payload: "false"
 mode: restart
