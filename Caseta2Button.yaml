@@ -1,0 +1,119 @@
+blueprint:
+  name: Lutron Caseta Pico 2-button Remote
+  description: Short and long press automations for the Pico 2-button remote
+  domain: automation
+  input:
+    pico_remote:
+      name: Pico Remote
+      description: Select the Pico remote to configure
+      selector:
+        device:
+          integration: lutron_caseta
+          model: PJ2-2B-GXX-X01 (Pico2Button)
+    on_short:
+      name: Top (on) button - Short press
+      description: Action to run on when the on button is briefly pressed
+      default: []
+      selector:
+        action: {}
+    off_short:
+      name: Bottom (off) button - Short press
+      description: Action to run on when the off button is briefly pressed
+      default: []
+      selector:
+        action: {}
+    on_long:
+      name: Top (on) button - Long press
+      description: Action to run on when the on button is held down
+      default: []
+      selector:
+        action: {}
+    off_long:
+      name: Bottom (off) button - Long press
+      description: Action to run on when the off button is held down
+      default: []
+      selector:
+        action: {}
+    time_before_long_press:
+      name: Time before long press
+      description: Amount of time button needs to be held before triggering "long press" action.
+      default: 2
+      selector:
+        number:
+          min: 0.0
+          max: 10.0
+          step: 0.25
+          unit_of_measurement: seconds
+          mode: slider
+    auto_mode:
+      name: Automation Mode
+      description: "Mode that automation runs in (single,  restart, queued, parallel)."
+      default: restart
+      selector:
+        select:
+          options:
+            - single
+            - restart
+            - queued
+            - parallel
+    mode_max:
+      name: "Mode Max (ignored by Single and Restart Modes)"
+      description: "Maximum number of runs that can be executed or queued at a time."
+      default: 10
+      selector:
+        number:
+          min: 1
+          max: 15
+trigger:
+  - platform: device
+    device_id: !input "pico_remote"
+    domain: lutron_caseta
+    type: press
+    subtype: "on"
+    id: on_press
+  - platform: device
+    device_id: !input "pico_remote"
+    domain: lutron_caseta
+    type: press
+    subtype: "off"
+    id: off_press
+condition: []
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: on_press
+        sequence:
+          - wait_for_trigger:
+              - platform: device
+                device_id: !input "pico_remote"
+                domain: lutron_caseta
+                type: release
+                subtype: "on"
+            timeout: !input "time_before_long_press"
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: "{{ wait.trigger == none }}"
+                sequence: !input "on_long"
+            default: !input "on_short"
+      - conditions:
+          - condition: trigger
+            id: off_press
+        sequence:
+          - wait_for_trigger:
+              - platform: device
+                device_id: !input "pico_remote"
+                domain: lutron_caseta
+                type: release
+                subtype: "off"
+            timeout: !input "time_before_long_press"
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: "{{ wait.trigger == none }}"
+                sequence: !input "off_long"
+            default: !input "off_short"
+    default: []
+mode: !input "auto_mode"
+max: !input "mode_max"
