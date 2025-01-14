@@ -22,7 +22,7 @@ blueprint:
       description: How long to delay sending off
       default: 00:03:30
       selector:
-        delay:
+        duration:
     mqtt_path:
       name: MQTT Item
       description: Just the sensor iself (office_occupancy)
