@@ -23,6 +23,13 @@ blueprint:
       default: 00:03:30
       selector:
         duration:
+    input_boolean_helper:
+      name: Helper
+      description: Helper input_boolean which is then connected to the template binary_sensor
+      selector:
+        entity:
+          filter:
+            - domain: input_boolean
     mqtt_path:
       name: MQTT Path
       description: For example - home/virtual/hoarding_occupancy/state
@@ -51,6 +58,9 @@ actions:
           id:
           - LightOffManually
       sequence:
+        - action: input_boolean.turn_off
+          target:
+            entity_id: !input input_boolean_helper
         - action: mqtt.publish
           data:
             qos: "2"
@@ -62,6 +72,9 @@ actions:
         entity_id: !input occupancy_sensor
         state: "on"
       sequence:
+        - action: input_boolean.turn_on
+          target:
+            entity_id: !input input_boolean_helper      
         - action: mqtt.publish
           data:
             qos: "2"
@@ -75,6 +88,9 @@ actions:
       sequence:
         - delay:
             !input off_smoothing_delay
+        - action: input_boolean.turn_off
+          target:
+            entity_id: !input input_boolean_helper
         - action: mqtt.publish
           data:
             qos: "2"
