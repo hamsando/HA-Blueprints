@@ -1,0 +1,148 @@
+blueprint:
+  name: Advanced Presence to Occupancy
+  description: Combine single source presence to occupancy v5
+  domain: automation
+  input:
+    trigger_section:
+      name: Triggers
+      description: These are the triggers. They are OR'd together to determine the state of the summmary input_boolean
+      input:
+        motion_sensors:    
+          name: Motion Sensors
+          description: These motions sensor detect if somebody is in the room
+          selector:
+            entity:
+              multiple: true
+              filter:
+                - domain: binary_sensor
+        media_players:    
+          name: Media Players
+          description: These Media Players, if ON, indicate somebody is in the room
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                - domain: media_player
+        toggle_switches:    
+          name: Switches and Input Booleans
+          description: These toggles, if ON, indicate somebody is in the room
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                - domain: switch, input_boolean, input_select                
+        robot_vacuum:
+          name: Roomba or Bravaa
+          description: The vacuum, if Docked, is considered OFF
+          default: []
+          selector:
+            entity:              
+              filter:
+                - domain: vacuum
+        house_mode:    
+          name: House Mode
+          description: If House Mode is Sleeping, it is ON, else OFF
+          default: []
+          selector:
+            entity:              
+              filter:
+                - domain: input_select
+        main_light_switch:
+          name: Main Light Switch (Trigger)
+          description: Turning off this light switch manually, will cause the room to be considered empty
+          default: []
+          selector:
+            entity:
+              filter:
+                - domain: light
+    delay_section:
+      input:
+        off_smoothing_delay: 
+          name: Delay
+          description: How long to delay after all triggers are OFF before indicating room is clear
+          default: 00:03:30
+          selector:
+            duration:
+    target_sensor_section
+      input:
+        input_boolean_helper:
+          name: Occupancy Helper
+          description: Helper input_boolean which is then connected to the template binary_sensor
+          selector:
+            entity:
+              filter:
+                - domain: input_boolean                
+
+triggers:
+  - trigger: state
+    entity_id: !input main_light_switch
+    from: "on"
+    to: "off"
+    id: LightOffManually
+  - trigger: state
+    entity_id: !input motion_sensors
+    from: null
+    to: null
+  - trigger: state
+    entity_id: !input media_players
+    from: null
+    to: null
+  - trigger: state
+    entity_id: !input toggle_switches
+    from: null
+    to: null
+  - trigger: state
+    entity_id: !input robot_vacuum
+    from: null
+    to: null
+  - trigger: state
+    entity_id: !input house_mode
+    from: null
+    to: null
+
+actions:
+  - choose:
+    - conditions:
+      - condition: and
+        conditions:
+        - condition: template
+          value_template: "{{trigger.to_state.context.user_id == none}}"
+        - condition: template
+          value_template: "{{trigger.to_state.context.parent_id == none}}"
+        - condition: trigger
+          id:
+          - LightOffManually
+      sequence:
+        - action: input_boolean.turn_off
+          target:
+            entity_id: !input input_boolean_helper
+    - conditions:
+      - condition: state
+        entity_id: !input motion_sensors
+        state: "off"
+      - condition: state
+        entity_id: !input media_players
+        state: "off"
+      - condition: state
+        entity_id: !input toggle_switches
+        state: "off"
+      - condition: state
+        entity_id: !input robot_vacuum
+        state: "docked"
+      - condition: state
+        entity_id: !input house_mode
+        state: "Sleeping"                  
+      sequence:
+        - delay:
+            !input off_smoothing_delay      
+        - action: input_boolean.turn_off
+          target:
+            entity_id: !input input_boolean_helper      
+    default:
+      sequence:
+        - action: input_boolean.turn_on
+          target:
+            entity_id: !input input_boolean_helper
+mode: restart
