@@ -3,6 +3,16 @@ blueprint:
   description: Combine single source presence to occupancy v5
   domain: automation
   input:
+    off_trigger_section:
+      name: Triggers OFF only
+        main_light_switch:
+          name: Main Light Switch (Trigger)
+          description: Turning off this light switch manually, will cause the room to be considered empty
+          default: []
+          selector:
+            entity:
+              filter:
+                - domain: light            
     trigger_section:
       name: Triggers
       description: These are the triggers. They are OR'd together to determine the state of the summmary input_boolean
@@ -51,15 +61,8 @@ blueprint:
             entity:              
               filter:
                 - domain: input_select
-        main_light_switch:
-          name: Main Light Switch (Trigger)
-          description: Turning off this light switch manually, will cause the room to be considered empty
-          default: []
-          selector:
-            entity:
-              filter:
-                - domain: light
     delay_section:
+      name: Delay
       input:
         off_smoothing_delay: 
           name: Delay
@@ -68,6 +71,7 @@ blueprint:
           selector:
             duration:
     target_sensor_section:
+      name: Helper Boolean
       input:
         input_boolean_helper:
           name: Occupancy Helper
