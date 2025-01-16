@@ -32,7 +32,9 @@ blueprint:
             entity:
               multiple: true
               filter:
-                - domain: switch, input_boolean, input_select                
+                - domain: 
+                  - switch
+                  - input_boolean
         robot_vacuum:
           name: Roomba or Bravaa
           description: The vacuum, if Docked, is considered OFF
