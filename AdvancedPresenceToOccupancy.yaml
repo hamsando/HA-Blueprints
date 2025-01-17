@@ -1,10 +1,11 @@
 blueprint:
   name: Advanced Presence to Occupancy
-  description: Combine single source presence to occupancy v5
+  description: Combine single source presence to occupancy v6
   domain: automation
   input:
-    off_trigger_section:
-      name: Triggers OFF only
+    force_off_section:
+      name: Light switch to force room clear
+      input:
         main_light_switch:
           name: Main Light Switch (Trigger)
           description: Turning off this light switch manually, will cause the room to be considered empty
@@ -12,7 +13,7 @@ blueprint:
           selector:
             entity:
               filter:
-                - domain: light            
+                - domain: light
     trigger_section:
       name: Triggers
       description: These are the triggers. They are OR'd together to determine the state of the summmary input_boolean
@@ -79,7 +80,7 @@ blueprint:
           selector:
             entity:
               filter:
-                - domain: input_boolean                
+                - domain: input_boolean
 
 triggers:
   - trigger: state
@@ -139,13 +140,13 @@ actions:
         state: "docked"
       - condition: state
         entity_id: !input house_mode
-        state: "Sleeping"                  
+        state: "Sleeping"
       sequence:
         - delay:
             !input off_smoothing_delay      
         - action: input_boolean.turn_off
           target:
-            entity_id: !input input_boolean_helper      
+            entity_id: !input input_boolean_helper
     default:
       sequence:
         - action: input_boolean.turn_on
