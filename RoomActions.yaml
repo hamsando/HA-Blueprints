@@ -1,0 +1,300 @@
+blueprint:
+  name: Room Actions based on Occupancy
+  description: Things to turn on or off based on room occupancy. 
+  domain: automation
+  input:
+    trigger_section:
+      name: Triggers
+      description: These are the triggers. Any of them can trigger this automation.
+      input:
+        occupancy_sensor:    
+          name: Occupancy Sensor
+          description: This occupancy sensor controls the room action
+          selector:
+            entity:
+              filter:
+                - domain: binary_sensor    
+    general_config_section:
+      name: These are some General items related to control of the room
+      input:
+        room_override:
+          name: Room Override switch. 
+          selector:
+            entity:
+              filter:
+                - domain: input_boolean
+      name: Notification Script
+      input:
+        notification_script:
+          name: The script which handles notification lighting.
+          default: []
+          selector:
+            entity:
+              filter:
+                - domain: script                
+    occupied_on_section:
+      name: Things to turn ON when Occupied
+      input:
+        lights_on_occupied:
+          name: Lights (don't include lights listed in the Notification Lighting section)
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                - domain: light                
+        switches_on_occupied:    
+          name: Switches
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                - domain: 
+                  - switch
+        boolean_on_occupied:    
+          name: Input Booleans
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                - domain: 
+                  - input_boolean                  
+        script_on_occupied:
+          name: Script to run
+          default: []
+          selector:
+            entity:
+              filter:
+                - domain: script
+    occupied_off_section:
+      name: Things to turn OFF when Occupied
+      input:
+        lights_off_occupied:
+          name: Lights (don't include lights listed in the Notification Lighting section)
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                - domain: light                
+        switches_off_occupied:    
+          name: Switches
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                - domain: 
+                  - switch
+        boolean_off_occupied:    
+          name: Input Booleans
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                - domain: 
+                  - input_boolean                                    
+        script_off_occupied:
+          name: Script to run
+          default: []
+          selector:
+            entity:
+              filter:
+                - domain: script                  
+    empty_on_section:
+      name: Things to turn ON when the room is empty
+      input:
+        lights_on_empty:
+          name: Lights (don't include lights listed in the Notification Lighting section)          
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                - domain: light                
+        switches_on_empty:    
+          name: Switches
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                - domain: 
+                  - switch
+        boolean_on_empty:    
+          name: Input Booleans
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                - domain: 
+                  - input_boolean        
+        script_on_empty:
+          name: Script to run
+          default: []
+          selector:
+            entity:
+              filter:
+                - domain: script                 
+    empty_off_section:
+      name: Things to turn OFF when the room is empty
+      input:
+        lights_off_empty:
+          name: Lights (don't include lights listed in the Notification Lighting section)      
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                - domain: light                
+        switches_off_empty:    
+          name: Switches
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                - domain: 
+                  - switch
+        boolean_off_empty:    
+          name: Input Booleans
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                - domain: 
+                  - input_boolean           
+        script_off_empty:
+          name: Script to run
+          default: []
+          selector:
+            entity:
+              filter:
+                - domain: script                                   
+        delay_section:
+          name: Delay
+          description: Use this section to add a short delay to turn off the last light in the room. 
+          input:
+            off_delay: 
+              name: Delay
+              default: 00:00:00
+              selector:
+                duration:
+        last_light:
+          name: Lights
+          description: This is the last light to turn off. 
+          default: []
+          selector:
+            entity:
+              filter:
+                - domain: light                                  
+
+triggers:
+  - trigger: state
+    entity_id: !input occupancy_sensors
+    from: null
+    to: null
+
+conditions:
+  - condition: and
+    conditions:
+      - condition: state
+        entity_id: !input room_override
+        state: "off"
+      - condition: state
+        entity_id: input_boolean.dark_mode
+        state: "off"
+        
+actions:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: !input occupancy_sensor
+        state: "off"
+    sequence:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: !input lights_off_empty
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: !input lights_on_empty          
+      - action: switch.turn_off
+        target:
+          entity_id: !input switches_off_empty
+      - action: switch.turn_on
+        target:
+          entity_id: !input boolean_on_empty          
+      - action: input_boolean.turn_off
+        target:
+          entity_id: !input boolean_off_empty
+      - action: input_boolean.turn_on
+        target:
+          entity_id: !input switches_on_empty                    
+      - action: script.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: !input script_off_empty
+      - action: script.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: !input script_on_empty          
+      - delay:
+          !input delay
+      - action: light.turn_off
+        metadata: {}
+        data:
+          transition: 15
+        target:
+          entity_id: !input last_light
+    default:
+      sequence:
+        - action: light.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: !input lights_on_occupied      
+        - action: light.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id: !input lights_off_occupied
+        - action: switch.turn_on
+          target:
+            entity_id: !input boolean_on_occupied                      
+        - action: switch.turn_off
+          target:
+            entity_id: !input switches_off_occupied
+        - action: input_boolean.turn_on
+          target:
+            entity_id: !input switches_on_occupied                    
+        - action: input_boolean.turn_off
+          target:
+            entity_id: !input boolean_off_occupied
+        - action: script.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: !input script_on_occupied                      
+        - action: script.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: !input script_off_occupied
+    - action: script.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id: !input notification_script    
+        
+mode: restart
