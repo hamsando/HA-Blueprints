@@ -175,16 +175,16 @@ blueprint:
           selector:
             entity:
               filter:
-                - domain: script                                   
-        delay_section:
+                - domain: script             
+    last_light_section:
+      name: Add a delayed off for one light so that the room doesn't suddenly go dark
+      input:                
+        last_light_delay: 
           name: Delay
-          input:
-            last_light_delay: 
-              name: Delay
-              description: How long to delay before turning off the last light
-              default: 00:00:15
-              selector:
-                duration:        
+          description: How long to delay before turning off the last light
+          default: 00:00:15
+          selector:
+            duration:        
         last_light:
           name: Lights
           description: This is the last light to turn off. 
