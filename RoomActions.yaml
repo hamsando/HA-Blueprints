@@ -291,10 +291,10 @@ actions:
           data: {}
           target:
             entity_id: !input script_off_occupied
-    - action: script.turn_on
-      metadata: {}
-      data: {}
-      target:
-        entity_id: !input notification_script    
+  - action: script.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: !input notification_script    
         
 mode: restart
