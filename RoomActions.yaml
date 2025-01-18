@@ -16,7 +16,7 @@ blueprint:
     general_config_section:
       name: General Configuration Items
       input:
-        room_override:
+        override_control:
           name: Room Override switch.
           default: []
           selector:
@@ -200,7 +200,7 @@ triggers:
     from: null
     to: null
   - trigger: state
-    entity_id: !input room_override
+    entity_id: !input override_control
     from: "on"
     to: "off"
 
@@ -208,7 +208,7 @@ conditions:
   - condition: and
     conditions:
       - condition: state
-        entity_id: !input room_override
+        entity_id: !input override_control
         state: "off"
       - condition: state
         entity_id: input_boolean.dark_mode
