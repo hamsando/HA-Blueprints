@@ -16,16 +16,14 @@ blueprint:
     general_config_section:
       name: General Configuration Items
       input:
-        override_control:
-          name: Room Override switch.
+        manual_control:
+          name: Room Override Switch.
           default: []
           selector:
             entity:
               filter:
                 - domain: 
                   - input_boolean       
-      name: Notification Script
-      input:
         notification_script:
           name: The script which handles notification lighting.
           default: []
@@ -201,7 +199,7 @@ triggers:
     from: null
     to: null
   - trigger: state
-    entity_id: !input override_control
+    entity_id: !input manual_control
     from: "on"
     to: "off"
 
@@ -209,7 +207,7 @@ conditions:
   - condition: and
     conditions:
       - condition: state
-        entity_id: !input override_control
+        entity_id: !input manual_control
         state: "off"
       - condition: state
         entity_id: input_boolean.dark_mode
