@@ -8,8 +8,7 @@ blueprint:
       description: These are the triggers. Any of them can trigger this automation.
       input:
         occupancy_sensor:    
-          name: Occupancy Sensor
-          description: This occupancy sensor controls the room action
+          name: Occupancy Sensor          
           selector:
             entity:
               filter:
