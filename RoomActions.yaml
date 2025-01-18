@@ -179,12 +179,12 @@ blueprint:
         delay_section:
           name: Delay
           input:
-            the_delay: 
+            last_light_delay: 
               name: Delay
               description: How long to delay before turning off the last light
               default: 00:00:15
               selector:
-                duration:
+                duration:        
         last_light:
           name: Lights
           description: This is the last light to turn off. 
@@ -250,7 +250,7 @@ actions:
           target:
             entity_id: !input script_on_empty          
         - delay:
-            !input the_delay
+            !input last_light_delay
         - action: light.turn_off
           metadata: {}
           data:
