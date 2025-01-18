@@ -178,11 +178,11 @@ blueprint:
                 - domain: script                                   
         delay_section:
           name: Delay
-          description: Use this section to add a short delay to turn off the last light in the room. 
           input:
             the_delay: 
               name: Delay
-              default: 00:00:00
+              description: How long to delay before turning off the last light
+              default: 00:00:15
               selector:
                 duration:
         last_light:
