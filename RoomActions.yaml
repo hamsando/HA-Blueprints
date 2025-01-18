@@ -180,7 +180,7 @@ blueprint:
           name: Delay
           description: Use this section to add a short delay to turn off the last light in the room. 
           input:
-            off_delay: 
+            the_delay: 
               name: Delay
               default: 00:00:00
               selector:
@@ -250,7 +250,7 @@ actions:
           target:
             entity_id: !input script_on_empty          
         - delay:
-            !input delay
+            !input the_delay
         - action: light.turn_off
           metadata: {}
           data:
