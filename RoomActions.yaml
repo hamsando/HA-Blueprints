@@ -1,6 +1,6 @@
 blueprint:
   name: Room Actions based on Occupancy
-  description: Things to turn on or off based on room occupancy. 
+  description: Things to turn on or off based on room occupancy.
   domain: automation
   input:
     trigger_section:
@@ -216,47 +216,47 @@ actions:
       - condition: state
         entity_id: !input occupancy_sensor
         state: "off"
-    sequence:
-      - action: light.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: !input lights_off_empty
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: !input lights_on_empty          
-      - action: switch.turn_off
-        target:
-          entity_id: !input switches_off_empty
-      - action: switch.turn_on
-        target:
-          entity_id: !input boolean_on_empty          
-      - action: input_boolean.turn_off
-        target:
-          entity_id: !input boolean_off_empty
-      - action: input_boolean.turn_on
-        target:
-          entity_id: !input switches_on_empty                    
-      - action: script.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: !input script_off_empty
-      - action: script.turn_on
-        metadata: {}
-        data: {}
-        target:
-          entity_id: !input script_on_empty          
-      - delay:
-          !input delay
-      - action: light.turn_off
-        metadata: {}
-        data:
-          transition: 15
-        target:
-          entity_id: !input last_light
+      sequence:
+        - action: light.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id: !input lights_off_empty
+        - action: light.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: !input lights_on_empty          
+        - action: switch.turn_off
+          target:
+            entity_id: !input switches_off_empty
+        - action: switch.turn_on
+          target:
+            entity_id: !input boolean_on_empty          
+        - action: input_boolean.turn_off
+          target:
+            entity_id: !input boolean_off_empty
+        - action: input_boolean.turn_on
+          target:
+            entity_id: !input switches_on_empty                    
+        - action: script.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: !input script_off_empty
+        - action: script.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: !input script_on_empty          
+        - delay:
+            !input delay
+        - action: light.turn_off
+          metadata: {}
+          data:
+            transition: 15
+          target:
+            entity_id: !input last_light
     default:
       sequence:
         - action: light.turn_on
