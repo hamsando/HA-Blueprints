@@ -16,10 +16,10 @@ blueprint:
                 - domain: binary_sensor    
     general_config_section:
       name: General Configuration Items
-      description: These are some General items related to control of the room
       input:
         room_override:
-          name: Room Override switch. 
+          name: Room Override switch.
+          default: []
           selector:
             entity:
               filter:
