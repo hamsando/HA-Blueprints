@@ -15,7 +15,8 @@ blueprint:
               filter:
                 - domain: binary_sensor    
     general_config_section:
-      name: These are some General items related to control of the room
+      name: General Configuration Items
+      description: These are some General items related to control of the room
       input:
         room_override:
           name: Room Override switch. 
@@ -196,9 +197,13 @@ blueprint:
 
 triggers:
   - trigger: state
-    entity_id: !input occupancy_sensors
+    entity_id: !input occupancy_sensor
     from: null
     to: null
+  - trigger: state
+    entity_id: !input room_override
+    from: "on"
+    to: "off"
 
 conditions:
   - condition: and
