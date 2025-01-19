@@ -11,9 +11,9 @@ blueprint:
           name: Occupancy Sensor          
           selector:
             entity:
-              domain:
-                - binary_sensor
               filter:                
+                domain:
+                  - binary_sensor              
                 include:
                   - name: "*occupancy"
     general_config_section:
@@ -23,10 +23,10 @@ blueprint:
           name: Room Override Switch.
           default: []
           selector:
-            domain: 
-              - input_boolean       
             entity:
               filter:
+                domain: 
+                  - input_boolean                     
                 include:
                   - name: "*override"
         notification_light:
@@ -35,7 +35,8 @@ blueprint:
           selector:
             entity:
               filter:
-                - domain: light                          
+                domain: 
+                  - light                          
         notification_script:
           name: The script which handles notification lighting.
           default: []
