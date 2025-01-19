@@ -47,6 +47,7 @@ blueprint:
           selector:
             entity:
               multiple: true              
+              exclude_entities: !input notification_light
               filter:
                 - domain: light                
         switches_on_occupied:    
