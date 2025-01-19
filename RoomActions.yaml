@@ -266,7 +266,7 @@ actions:
         - choose:
           - conditions:
             - condition: template
-              value_template: "{{!input notification_light != !input last_light}}"
+              value_template: "{{ !input notification_light != !input last_light }}"
             sequence:
               - delay:
                   !input last_light_delay
