@@ -193,6 +193,10 @@ blueprint:
               filter:
                 - domain: light                                  
 
+variables:
+  _notificationLight: !input notification_light
+  _lastLight: !input last_light
+
 triggers:
   - trigger: state
     entity_id: !input occupancy_sensor
@@ -266,7 +270,7 @@ actions:
         - choose:
           - conditions:
             - condition: template
-              value_template: "{{ !input notification_light != !input last_light }}"
+              value_template: "{{ _notificationLight != _lastLight }}"
             sequence:
               - delay:
                   !input last_light_delay
