@@ -232,6 +232,17 @@ actions:
           data: {}
           target:
             entity_id: !input lights_off_empty
+        - choose:
+          - conditions:
+            - condition: state
+              entity_id: input_select.current_light_notification_type
+              state: "None"
+            sequence:
+              - action: light.turn_off
+                metadata: {}
+                data: {}
+                target:
+                  entity_id: !input notification_light
         - action: light.turn_on
           metadata: {}
           data: {}
@@ -273,6 +284,17 @@ actions:
         data: {}
         target:
           entity_id: !input lights_on_occupied      
+        - choose:
+          - conditions:
+            - condition: state
+              entity_id: input_select.current_light_notification_type
+              state: "None"
+            sequence:
+              - action: light.turn_on
+                metadata: {}
+                data: {}
+                target:
+                  entity_id: !input notification_light          
       - action: light.turn_off
         metadata: {}
         data: {}
