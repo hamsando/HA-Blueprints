@@ -31,18 +31,11 @@ blueprint:
             entity:
               filter:
                 - domain: light
-        notification_script:
-          name: The script which handles notification lighting.
-          default: []
-          selector:
-            entity:
-              filter:
-                - domain: script                
     occupied_on_section:
       name: Things to turn ON when Occupied
       input:
         lights_on_occupied:
-          name: Lights (don't include lights listed in the Notification Lighting section)
+          name: Lights 
           default: []
           selector:
             entity:
@@ -78,7 +71,7 @@ blueprint:
       name: Things to turn OFF when Occupied
       input:
         lights_off_occupied:
-          name: Lights (don't include lights listed in the Notification Lighting section)
+          name: Lights 
           default: []
           selector:
             entity:
@@ -114,7 +107,7 @@ blueprint:
       name: Things to turn ON when the room is empty
       input:
         lights_on_empty:
-          name: Lights (don't include lights listed in the Notification Lighting section)          
+          name: Lights 
           default: []
           selector:
             entity:
@@ -150,7 +143,7 @@ blueprint:
       name: Things to turn OFF when the room is empty
       input:
         lights_off_empty:
-          name: Lights (don't include lights listed in the Notification Lighting section)      
+          name: Lights 
           default: []
           selector:
             entity:
@@ -284,17 +277,17 @@ actions:
         data: {}
         target:
           entity_id: !input lights_on_occupied      
-        - choose:
-          - conditions:
-            - condition: state
-              entity_id: input_select.current_light_notification_type
-              state: "None"
-            sequence:
-              - action: light.turn_on
-                metadata: {}
-                data: {}
-                target:
-                  entity_id: !input notification_light          
+      - choose:
+        - conditions:
+          - condition: state
+            entity_id: input_select.current_light_notification_type
+            state: "None"
+          sequence:
+            - action: light.turn_on
+              metadata: {}
+              data: {}
+              target:
+                entity_id: !input notification_light          
       - action: light.turn_off
         metadata: {}
         data: {}
@@ -322,10 +315,5 @@ actions:
         data: {}
         target:
           entity_id: !input script_off_occupied
-  - action: script.turn_on
-    metadata: {}
-    data: {}
-    target:
-      entity_id: !input notification_script    
         
 mode: restart
