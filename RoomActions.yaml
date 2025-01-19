@@ -24,6 +24,8 @@ blueprint:
               filter:
                 - domain: 
                   - input_boolean       
+                - include:
+                  - name: "*override"
         notification_light:
           name: The (optional) light used for notifications
           default: []
