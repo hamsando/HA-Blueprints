@@ -272,6 +272,17 @@ actions:
             - condition: template
               value_template: "{{ _notificationLight != _lastLight }}"
             sequence:
+              - choose:
+                - conditions:
+                  - condition: state
+                    entity_id: input_select.current_light_notification_type
+                    state: "None"
+                  sequence:
+                    - action: light.turn_off
+                      metadata: {}
+                      data: {}                        
+                      target:
+                        entity_id: !input notification_light            
               - delay:
                   !input last_light_delay
               - action: light.turn_off
@@ -280,6 +291,22 @@ actions:
                   transition: 15
                 target:
                   entity_id: !input last_light
+        default:
+          - choose:
+            - conditions:
+              - condition: state
+                entity_id: input_select.current_light_notification_type
+                state: "None"
+              sequence:        
+                - delay:
+                    !input last_light_delay
+                - action: light.turn_off
+                  metadata: {}
+                  data:
+                    transition: 15
+                  target:
+                    entity_id: !input last_light
+                   
     default:
       - action: light.turn_on
         metadata: {}
