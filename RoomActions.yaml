@@ -12,7 +12,7 @@ blueprint:
           selector:
             entity:
               filter:
-                - domain: binary_sensor    
+                - domain: binary_sensor   
     general_config_section:
       name: General Configuration Items
       input:
@@ -24,8 +24,6 @@ blueprint:
               filter:
                 - domain: 
                   - input_boolean       
-                - include:
-                  - name: "*override"
         notification_light:
           name: The (optional) light used for notifications
           default: []
@@ -49,7 +47,6 @@ blueprint:
           selector:
             entity:
               multiple: true              
-              exclude_entities: !input notification_light
               filter:
                 - domain: light                
         switches_on_occupied:    
