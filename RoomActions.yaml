@@ -11,8 +11,11 @@ blueprint:
           name: Occupancy Sensor          
           selector:
             entity:
-              filter:
-                - domain: binary_sensor    
+              domain:
+                - binary_sensor
+              filter:                
+                include:
+                  - name: "*occupancy"
     general_config_section:
       name: General Configuration Items
       input:
@@ -20,10 +23,19 @@ blueprint:
           name: Room Override Switch.
           default: []
           selector:
+            domain: 
+              - input_boolean       
             entity:
               filter:
-                - domain: 
-                  - input_boolean       
+                include:
+                  - name: "*override"
+        notification_light:
+          name: This (optional) light is used for notification
+          default: []
+          selector:
+            entity:
+              filter:
+                - domain: light                          
         notification_script:
           name: The script which handles notification lighting.
           default: []
@@ -35,19 +47,20 @@ blueprint:
       name: Things to turn ON when Occupied
       input:
         lights_on_occupied:
-          name: Lights (don't include lights listed in the Notification Lighting section)
+          name: Lights
           default: []
           selector:
             entity:
               multiple: true
-              filter:
-                - domain: light                
+              domain:
+                - light                
+              exclude_entities: !input notification_light                  
         switches_on_occupied:    
           name: Switches
           default: []
           selector:
             entity:
-              multiple: true
+              multiple: true              
               filter:
                 - domain: 
                   - switch
@@ -71,7 +84,7 @@ blueprint:
       name: Things to turn OFF when Occupied
       input:
         lights_off_occupied:
-          name: Lights (don't include lights listed in the Notification Lighting section)
+          name: Lights
           default: []
           selector:
             entity:
@@ -107,7 +120,7 @@ blueprint:
       name: Things to turn ON when the room is empty
       input:
         lights_on_empty:
-          name: Lights (don't include lights listed in the Notification Lighting section)          
+          name: Lights
           default: []
           selector:
             entity:
@@ -143,7 +156,7 @@ blueprint:
       name: Things to turn OFF when the room is empty
       input:
         lights_off_empty:
-          name: Lights (don't include lights listed in the Notification Lighting section)      
+          name: Lights
           default: []
           selector:
             entity:
