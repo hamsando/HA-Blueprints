@@ -19,8 +19,8 @@ blueprint:
       description: These are the triggers. They are OR'd together to determine the state of the summmary input_boolean
       input:
         motion_sensors:    
-          name: Motion Sensors
-          description: These motions sensor detect if somebody is in the room
+          name: Motion and other Binary Sensors
+          description: These binary sensors detect if somebody is in the room
           selector:
             entity:
               multiple: true
