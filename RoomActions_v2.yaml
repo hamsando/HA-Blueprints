@@ -206,7 +206,7 @@ actions:
             - action: light.turn_on
               metadata: {}
               data:
-                color_temp_kelvin: "{{ states(_lightTemperature) }}"
+                color_temp_kelvin: !input the_light_temperature
                 brightness_pct: 100
               target:
                 entity_id: !input notification_light          
