@@ -1,0 +1,223 @@
+blueprint:
+  name: Room Actions based on Occupancy v2
+  description: Things to turn on or off based on room occupancy.
+  domain: automation
+  input:
+    trigger_section:
+      name: Triggers
+      description: These are the triggers. Any of them can trigger this automation.
+      input:
+        occupancy_sensor:    
+          name: Occupancy Sensor          
+          selector:
+            entity:
+              filter:
+                - domain: binary_sensor   
+    general_config_section:
+      name: General Configuration Items
+      input:
+        manual_control:
+          name: Room Override Switch.
+          default: []
+          selector:
+            entity:
+              filter:
+                - domain: 
+                  - input_boolean       
+        notification_light:
+          name: The (optional) light used for notifications
+          default: []
+          selector:
+            entity:
+              filter:
+                - domain: light    
+        last_light:
+          name: Lights
+          description: This is the last light to turn off. 
+          default: []
+          selector:
+            entity:
+              filter:
+                - domain: light                                        
+        last_light_delay: 
+          name: Delay
+          description: How long to delay before turning off the last light
+          default: 00:00:15
+          selector:
+            duration:        
+                
+    normal_entities_section:
+      name: Things to turn ON/Off when Occupied/Empty 
+      input:
+        the_lights:
+          name: Lights 
+          default: []
+          selector:
+            target:
+              entity:
+                - domain: light      
+        the_light_temperature:
+          name: Lighting Temperature
+          default: 2700
+          selector:
+            entity:
+              filter:
+                - domain: 
+                  - input_number                
+        the_switches:    
+          name: Switches
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                - domain: 
+                  - switch
+        the_booleans:    
+          name: Input Booleans
+          default: []
+          selector:
+            entity:
+              multiple: true
+              filter:
+                - domain: 
+                  - input_boolean                  
+        the_script:
+          name: Script to run
+          default: []
+          selector:
+            entity:
+              filter:
+                - domain: script
+
+variables:
+  _notificationLight: !input notification_light
+  _lastLight: !input last_light
+
+triggers:
+  - trigger: state
+    entity_id: !input occupancy_sensor
+    from: null
+    to: null
+  - trigger: state
+    entity_id: !input manual_control
+    from: "on"
+    to: "off"
+
+conditions:
+  - condition: and
+    conditions:
+      - condition: state
+        entity_id: !input manual_control
+        state: "off"
+      - condition: state
+        entity_id: input_boolean.dark_mode
+        state: "off"
+        
+actions:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: !input occupancy_sensor
+        state: "off"
+      sequence:
+        - action: light.turn_off
+          metadata: {}
+          data: {}
+          target:
+            entity_id: !input the_lights
+        - choose:
+          - conditions:
+            - condition: state
+              entity_id: input_select.current_light_notification_type
+              state: "None"
+            sequence:
+              - action: light.turn_off
+                metadata: {}
+                data: {}
+                target:
+                  entity_id: !input notification_light
+        - action: switch.turn_off
+          target:
+            entity_id: !input the_switches
+        - action: input_boolean.turn_off
+          target:
+            entity_id: !input the_booleans
+        - action: script.turn_on
+          metadata: {}
+          data: {}
+          target:
+            entity_id: !input the_script
+        - choose:
+          - conditions:
+            - condition: template
+              value_template: "{{ _notificationLight != _lastLight }}"
+            sequence:
+              - choose:
+                - conditions:
+                  - condition: state
+                    entity_id: input_select.current_light_notification_type
+                    state: "None"
+                  sequence:
+                    - action: light.turn_off
+                      metadata: {}
+                      data: {}                        
+                      target:
+                        entity_id: !input notification_light            
+              - delay:
+                  !input last_light_delay
+              - action: light.turn_off
+                metadata: {}
+                data:
+                  transition: 15
+                target:
+                  entity_id: !input last_light
+          default:
+            - choose:
+              - conditions:
+                - condition: state
+                  entity_id: input_select.current_light_notification_type
+                  state: "None"
+                sequence:        
+                  - delay:
+                      !input last_light_delay
+                  - action: light.turn_off
+                    metadata: {}
+                    data:
+                      transition: 15
+                    target:
+                      entity_id: !input last_light                   
+    default:
+      - action: light.turn_on
+        metadata: {}
+        data:
+          kelvin: !input the_light_temperature
+          brightness_pct: 100        
+        target:
+          entity_id: !input the_lights
+      - choose:
+        - conditions:
+          - condition: state
+            entity_id: input_select.current_light_notification_type
+            state: "None"
+          sequence:
+            - action: light.turn_on
+              metadata: {}
+              data:
+                kelvin: !input the_light_temperature
+                brightness_pct: 100
+              target:
+                entity_id: !input notification_light          
+      - action: switch.turn_on
+        target:
+          entity_id: !input the_switches
+      - action: input_boolean.turn_on
+        target:
+          entity_id: !input the_booleans
+      - action: script.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: !input the_script
+        
+mode: restart
