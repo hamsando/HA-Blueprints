@@ -90,6 +90,7 @@ blueprint:
 variables:
   _notificationLight: !input notification_light
   _lastLight: !input last_light
+  _lightTemperature: !input the_light_temperature
 
 triggers:
   - trigger: state
@@ -191,7 +192,7 @@ actions:
       - action: light.turn_on
         metadata: {}
         data:
-          color_temp_kelvin: {{ states(!input the_light_temperature) }}
+          color_temp_kelvin: {{ states(_lightTemperature) }}
           brightness_pct: 100        
         target: !input the_lights
       - choose:
@@ -203,7 +204,7 @@ actions:
             - action: light.turn_on
               metadata: {}
               data:
-                color_temp_kelvin: {{ states(!input the_light_temperature) }}
+                color_temp_kelvin: {{ states(_lightTemperature) }}
                 brightness_pct: 100
               target:
                 entity_id: !input notification_light          
