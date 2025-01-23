@@ -61,23 +61,23 @@ blueprint:
                 - domain: light      
         the_light_temperature:
           name: Lighting Temperature
-          default: 2700
           selector:
-            color_temp:
-              unit: kelvin 
+            input_numeric:              
         the_switches:    
           name: Switches
           default: []
           selector:
-            target:
-              entity:
+            entity:
+              multiple: true
+              filter:
                 - domain: switch
         the_booleans:    
           name: Input Booleans
           default: []
           selector:
-            target:
-              entity:
+            entity:
+              multiple: true
+              filter:
                 - domain: input_boolean                  
         the_script:
           name: Script to run
@@ -135,10 +135,12 @@ actions:
                   entity_id: !input notification_light
         - action: switch.turn_off
           default: []
-          target: !input the_switches
+          target: 
+            entity_id: !input the_switches
         - action: input_boolean.turn_off
           default: []
-          target: !input the_booleans
+          target: 
+            entity_id: !input the_booleans
         - action: script.turn_on
           metadata: {}
           data:
@@ -189,7 +191,7 @@ actions:
       - action: light.turn_on
         metadata: {}
         data:
-          color_temp_kelvin: !input the_light_temperature
+          color_temp_kelvin: {{ states(!input the_light_temperature) }}
           brightness_pct: 100        
         target: !input the_lights
       - choose:
@@ -201,14 +203,16 @@ actions:
             - action: light.turn_on
               metadata: {}
               data:
-                color_temp_kelvin: !input the_light_temperature
+                color_temp_kelvin: {{ states(!input the_light_temperature) }}
                 brightness_pct: 100
               target:
                 entity_id: !input notification_light          
       - action: switch.turn_on
-        target: !input the_switches
+        target: 
+          entity_id: !input the_switches
       - action: input_boolean.turn_on
-        target: !input the_booleans
+        target: 
+          entity_id: !input the_booleans
       - action: script.turn_on
         metadata: {}
         data: 
