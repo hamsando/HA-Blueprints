@@ -62,8 +62,7 @@ blueprint:
         the_light_temperature:
           name: Normal Room Lighting Temperature
           selector:
-            color_temp:              
-                unit: kelvin
+            color_temp_kelvin:              
         the_switches:    
           name: Switches
           default: []
