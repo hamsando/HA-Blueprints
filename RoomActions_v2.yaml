@@ -61,8 +61,10 @@ blueprint:
                 - domain: light      
         the_light_temperature:
           name: Normal Room Lighting Temperature
+          default: 2700
           selector:
-            color_temp_kelvin:              
+            color_temp:
+              unit: kelvin
         the_switches:    
           name: Switches
           default: []
