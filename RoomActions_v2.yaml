@@ -122,8 +122,6 @@ actions:
         state: "off"
       sequence:
         - action: light.turn_off
-          metadata: {}
-          data: {}
           target: !input the_lights
         - choose:
           - conditions:
