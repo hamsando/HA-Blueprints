@@ -60,9 +60,9 @@ blueprint:
               entity:
                 - domain: light      
         the_light_temperature:
-          name: Lighting Temperature
+          name: Normal Room Lighting Temperature
           selector:
-            input_numeric:              
+            color_temp:              
         the_switches:    
           name: Switches
           default: []
