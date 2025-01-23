@@ -120,8 +120,6 @@ actions:
       sequence:
         - action: light.turn_off
           target: !input the_lights
-          data:
-            transition: 15
         - choose:
           - conditions:
             - condition: state
