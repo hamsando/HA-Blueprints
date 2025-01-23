@@ -41,8 +41,11 @@ blueprint:
                 - domain: light                                        
         last_light_delay: 
           name: Delay
-          description: How long to delay before turning off the last light
-          default: 00:00:15
+          description: How long to delay before turning off the last light          
+          default:
+            hours: 00
+            minutes: 00
+            seconds: 15
           selector:
             duration:        
                 
@@ -131,8 +134,10 @@ actions:
                 target:
                   entity_id: !input notification_light
         - action: switch.turn_off
+          default: []
           target: !input the_switches
         - action: input_boolean.turn_off
+          default: []
           target: !input the_booleans
         - action: script.turn_on
           metadata: {}
@@ -184,7 +189,7 @@ actions:
       - action: light.turn_on
         metadata: {}
         data:
-          kelvin: !input the_light_temperature
+          color_temp_kelvin: !input the_light_temperature
           brightness_pct: 100        
         target: !input the_lights
       - choose:
@@ -196,7 +201,7 @@ actions:
             - action: light.turn_on
               metadata: {}
               data:
-                kelvin: !input the_light_temperature
+                color_temp_kelvin: !input the_light_temperature
                 brightness_pct: 100
               target:
                 entity_id: !input notification_light          
