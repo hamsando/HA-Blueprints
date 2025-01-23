@@ -145,7 +145,8 @@ actions:
             entity_id: !input the_booleans
         - action: script.turn_on
           metadata: {}
-          data: {}
+          data:
+            script_onoff: "off"
           target:
             entity_id: !input the_script
         - choose:
@@ -216,7 +217,8 @@ actions:
           entity_id: !input the_booleans
       - action: script.turn_on
         metadata: {}
-        data: {}
+        data: 
+          script_onoff: "off"
         target:
           entity_id: !input the_script
         
