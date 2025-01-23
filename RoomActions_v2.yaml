@@ -90,7 +90,6 @@ blueprint:
 variables:
   _notificationLight: !input notification_light
   _lastLight: !input last_light
-  _lightTemperature: !input the_light_temperature
 
 triggers:
   - trigger: state
@@ -121,6 +120,8 @@ actions:
       sequence:
         - action: light.turn_off
           target: !input the_lights
+          data:
+            transition: 15
         - choose:
           - conditions:
             - condition: state
@@ -129,7 +130,8 @@ actions:
             sequence:
               - action: light.turn_off
                 metadata: {}
-                data: {}
+                data:
+                  transition: 15
                 target:
                   entity_id: !input notification_light
         - action: switch.turn_off
@@ -156,7 +158,8 @@ actions:
                   sequence:
                     - action: light.turn_off
                       metadata: {}
-                      data: {}                        
+                      data:
+                        transition: 15
                       target:
                         entity_id: !input notification_light            
               - delay:
