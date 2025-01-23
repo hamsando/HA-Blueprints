@@ -60,10 +60,8 @@ blueprint:
           name: Lighting Temperature
           default: 2700
           selector:
-            entity:
-              filter:
-                - domain: 
-                  - input_number                
+            color_temp:
+              unit: kelvin 
         the_switches:    
           name: Switches
           default: []
