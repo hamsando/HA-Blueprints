@@ -144,7 +144,8 @@ actions:
         - action: script.turn_on
           metadata: {}
           data:
-            script_onoff: "off"
+            variables:
+              script_onoff: "off"
           target:
             entity_id: !input the_script
         - choose:
@@ -216,7 +217,8 @@ actions:
       - action: script.turn_on
         metadata: {}
         data: 
-          script_onoff: "off"
+          variables:
+            script_onoff: "off"
         target:
           entity_id: !input the_script
         
