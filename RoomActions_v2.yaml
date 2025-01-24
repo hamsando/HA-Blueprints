@@ -94,7 +94,8 @@ variables:
   _notificationLight: !input notification_light
   _lastLight: !input last_light
   _allLights: !input the_lights
-  _allButLast: "{{ _allLights | reject('eq', _lastLight) | list }}"
+  _allButLastAndNotification: "{{ _allLights | reject('eq', _lastLight) | reject ('eq', _notificationLight) | list }}"
+  _allButNotification: "{{ _allLights | reject ('eq', _notificationLight) | list }}"
 
 triggers:
   - trigger: state
@@ -127,7 +128,7 @@ actions:
           data:
             transition: 15        
           target: 
-            entity_id: '{{ _allButLast }}'
+            entity_id: '{{ _allButLastAndNotification }}'
         - choose:
           - conditions:
             - condition: state
@@ -200,7 +201,7 @@ actions:
           color_temp_kelvin: !input the_light_temperature
           brightness_pct: 100        
         target: 
-          entity_id: !input the_lights
+          entity_id: '{{ _allButNotification }}'
       - choose:
         - conditions:
           - condition: state
