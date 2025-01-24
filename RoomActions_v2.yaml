@@ -50,13 +50,14 @@ blueprint:
             duration:        
                 
     normal_entities_section:
-      name: Things to turn ON/Off when Occupied/Empty 
+      name: Things to turn ON/Off when Occupied/Empty (include all lights here)
       input:
         the_lights:
           name: Lights 
           default: []
           selector:
             entity:
+              multiple: true
               filter:
                 - domain: light      
         the_light_temperature:
@@ -70,6 +71,7 @@ blueprint:
           default: []
           selector:
             entity:
+              multiple: true
               filter:
                 - domain: switch
         the_booleans:    
@@ -77,6 +79,7 @@ blueprint:
           default: []
           selector:
             entity:
+              multiple: true
               filter:
                 - domain: input_boolean                  
         the_script:
