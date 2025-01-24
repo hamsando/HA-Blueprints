@@ -50,10 +50,10 @@ blueprint:
             duration:        
                 
     normal_entities_section:
-      name: Things to turn ON/Off when Occupied/Empty (include all lights here)
+      name: Things to turn ON/Off when Occupied/Empty
       input:
         the_lights:
-          name: Lights 
+          name: Lights (include ALL lights here)
           default: []
           selector:
             entity:
