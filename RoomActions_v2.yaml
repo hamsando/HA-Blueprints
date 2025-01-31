@@ -174,9 +174,14 @@ actions:
                 - condition: state
                   entity_id: input_select.current_light_notification_type
                   state: "None"
-                sequence:        
-                  - delay:
-                      !input last_light_delay
+                sequence:  
+                  - choose:
+                    - conditions:
+                      - condition: template
+                        value_template: "{{ _transition == 15 }}"
+                      sequence:                
+                        - delay:
+                            !input last_light_delay
                   - action: light.turn_off
                     metadata: {}
                     data:
