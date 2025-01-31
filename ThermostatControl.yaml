@@ -1,0 +1,202 @@
+blueprint:
+  name: Thermostat Control
+  description: Thermostat Automation.
+  domain: automation
+  input:
+    thermostat_section:
+      name: Thermostat(s)
+      description: Thermostat(s) controlled by this automation
+      input:
+        the_thermostats:    
+          name: Thermostat(s)
+          selector:
+            entity:       
+              multiple: true
+              filter:
+                - domain: climate   
+    trigger_section:
+      name: Things that trigger a change in the thermostat
+      description: The room occupancy sensor.
+      input:
+        occupancy_sensor:    
+          name: Occupancy Sensor          
+          selector:
+            entity:              
+              filter:
+                - domain: binary_sensor   
+        outside_temp:    
+          name: Outside Temperature          
+          selector:
+            entity:              
+              filter:
+                - domain: sensor   
+    winter_target_temps:
+      name: Winter Temperature Targets
+      input:
+        winter_high:    
+          name: Target when room occupied          
+          selector:
+            default: 23
+            number:
+              min: 17
+              max: 25
+              unit_of_measurement: "Celsius"
+        winter_med:    
+          name: Target when not occupied, but we are awake          
+          selector:
+            default: 21
+            number:
+              min: 17
+              max: 25
+              unit_of_measurement: "Celsius"
+        winter_low:    
+          name: Target at night
+          selector:
+           default: 19
+            number:
+              min: 17
+              max: 25
+              unit_of_measurement: "Celsius"
+    summer_target_temps:
+      name: summer Temperature Targets
+      input:
+        summer_high:    
+          name: Target when room occupied          
+          selector:
+            default: 21
+            number:
+              min: 17
+              max: 25
+              unit_of_measurement: "Celsius"
+        summer_med:    
+          name: Target when not occupied, but we are awake          
+          selector:
+            default: 19
+            number:
+              min: 17
+              max: 25
+              unit_of_measurement: "Celsius"
+        summer_low:    
+          name: Target at night
+          selector:
+           default: 17
+            number:
+              min: 17
+              max: 25
+              unit_of_measurement: "Celsius"
+
+variables:
+  _summerHigh: !input summer_high
+  _summerMed: !input summer_med
+  _summerLow: !input summer_low
+  _winterHigh: !input winter_high
+  _winterMed: !input winter_med
+  _winterLow: !input winter_low
+  _outside_temp_sensor: !input outside_temp
+  _current_temp: "{{ states(_outside_temp_sensor) | float }}"
+  _offset: "{{ _current_temp + 1 if _current_temp <= 2 else 0 }}"
+
+triggers:
+  - trigger: state
+    entity_id: !input outside_temp
+    from: null
+    to: null
+  - trigger: state
+    entity_id: !input occupancy_sensor
+    from: null
+    to: null
+  - trigger: state
+    entity_id: input_select.house_mode
+    from: null
+    to: null
+conditions: []
+
+actions:
+  - choose:
+      - conditions:
+          - condition: numeric_state
+            entity_id: !input outside_temp
+            below: -1.8
+        sequence:
+          - action: climate.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id: !input the_thermostats
+          - action: climate.set_temperature
+            metadata: {}
+            data:
+              temperature: "{{ _winterHigh + _offset}}"
+            target:
+              entity_id: !input the_thermostats
+      - conditions:
+          - condition: state
+            entity_id: input_select.season
+            state: Winter
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: state
+                    entity_id: input_select.house_mode
+                    state: Sleeping
+                sequence:
+                  - action: climate.set_temperature
+                    metadata: {}
+                    data:
+                      temperature: "{{ _winterLow }}"
+                    target:
+                      entity_id: !input the_thermostats
+              - conditions:
+                  - condition: state
+                    entity_id: binary_sensor.hoarding_room_occupancy
+                    state: "on"
+                sequence:
+                  - action: climate.set_temperature
+                    metadata: {}
+                    data:
+                      temperature: "{{ _winterHigh }}"
+                    target:
+                      entity_id: !input the_thermostats
+            default:
+              - action: climate.set_temperature
+                metadata: {}
+                data:
+                  temperature: "{{ _winterMed }}"
+                target:
+                  entity_id: !input the_thermostats
+      - conditions:
+          - condition: state
+            entity_id: input_select.season
+            state: Summer
+        sequence:
+          - choose:
+              - conditions:
+                  - condition: state
+                    entity_id: input_select.house_mode
+                    state: Sleeping
+                sequence:
+                  - action: climate.set_temperature
+                    metadata: {}
+                    data:
+                      temperature: "{{ _summerLow }}"
+                    target:
+                      entity_id: !input the_thermostats
+              - conditions:
+                  - condition: state
+                    entity_id: binary_sensor.hoarding_room_occupancy
+                    state: "on"
+                sequence:
+                  - action: climate.set_temperature
+                    metadata: {}
+                    data:
+                      temperature: "{{ _summerHigh }}"
+                    target:
+                      entity_id: !input the_thermostats
+            default:
+              - action: climate.set_temperature
+                metadata: {}
+                data:
+                  temperature: "{{ _summerMed }}"
+                target:
+                  entity_id: !input the_thermostats
+mode: restart
