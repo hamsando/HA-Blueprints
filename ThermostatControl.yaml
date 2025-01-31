@@ -40,6 +40,7 @@ blueprint:
             number:
               min: 17
               max: 25
+              step: 0.5
               unit_of_measurement: "Celsius"
         winter_med:    
           name: Target when not occupied, but we are awake          
@@ -48,6 +49,7 @@ blueprint:
             number:
               min: 17
               max: 25
+              step: 0.5
               unit_of_measurement: "Celsius"
         winter_low:    
           name: Target at night
@@ -56,6 +58,7 @@ blueprint:
             number:
               min: 17
               max: 25
+              step: 0.5
               unit_of_measurement: "Celsius"
     summer_target_temps:
       name: summer Temperature Targets
@@ -65,16 +68,18 @@ blueprint:
           default: 21
           selector:
             number:
-              min: 17
+              min: 15
               max: 25
+              step: 0.5
               unit_of_measurement: "Celsius"
         summer_med:    
           name: Target when not occupied, but we are awake          
           default: 19                    
           selector:
             number:
-              min: 17
+              min: 15
               max: 25
+              step: 0.5
               unit_of_measurement: "Celsius"
         summer_low:    
           name: Target at night
@@ -83,6 +88,7 @@ blueprint:
             number:
               min: 15
               max: 25
+              step: 0.5
               unit_of_measurement: "Celsius"
 
 variables:
