@@ -158,7 +158,7 @@ actions:
                     - action: light.turn_off
                       metadata: {}
                       data:
-                        transition: _transition
+                        transition: "{{_transition|float}}"
                       target:
                         entity_id: !input notification_light            
               - delay:
@@ -166,7 +166,7 @@ actions:
               - action: light.turn_off
                 metadata: {}
                 data:
-                  transition: _transition
+                  transition: "{{_transition|float}}"
                 target:
                   entity_id: !input last_light
           default:
@@ -181,7 +181,7 @@ actions:
                   - action: light.turn_off
                     metadata: {}
                     data:
-                      transition: _transition
+                      transition: "{{_transition|float}}"
                     target:
                       entity_id: !input last_light                   
     default:
