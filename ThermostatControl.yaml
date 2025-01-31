@@ -35,24 +35,24 @@ blueprint:
       input:
         winter_high:    
           name: Target when room occupied          
-          selector:
-            default: 23
+          default: 23          
+          selector:            
             number:
               min: 17
               max: 25
               unit_of_measurement: "Celsius"
         winter_med:    
           name: Target when not occupied, but we are awake          
+          default: 21          
           selector:
-            default: 21
             number:
               min: 17
               max: 25
               unit_of_measurement: "Celsius"
         winter_low:    
           name: Target at night
+          default: 19          
           selector:
-            default: 19
             number:
               min: 17
               max: 25
@@ -62,26 +62,26 @@ blueprint:
       input:
         summer_high:    
           name: Target when room occupied          
+          default: 21
           selector:
-            default: 21
             number:
               min: 17
               max: 25
               unit_of_measurement: "Celsius"
         summer_med:    
           name: Target when not occupied, but we are awake          
+          default: 19                    
           selector:
-            default: 19
             number:
               min: 17
               max: 25
               unit_of_measurement: "Celsius"
         summer_low:    
           name: Target at night
+          default: 15          
           selector:
-           default: 17
             number:
-              min: 17
+              min: 15
               max: 25
               unit_of_measurement: "Celsius"
 
