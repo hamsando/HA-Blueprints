@@ -96,7 +96,8 @@ variables:
   _allLights: !input the_lights
   _allButLastAndNotification: "{{ _allLights | reject('eq', _lastLight) | reject ('eq', _notificationLight) | list }}"
   _allButNotification: "{{ _allLights | reject ('eq', _notificationLight) | list }}"  
-
+  _transition: "{{ (15 if (now() - states.input_select.current_light_notification_type.last_changed) > timedelta(seconds = 3) else 0) | float }}"
+  
 triggers:
   - trigger: state
     entity_id: !input occupancy_sensor
@@ -118,8 +119,6 @@ conditions:
         state: "off"
         
 actions:
-  - variables:
-      _transition: "{{ (15 if (now() - states.input_select.current_light_notification_type.last_changed) > timedelta(seconds = 3) else 0) | float }}"
   - choose:
     - conditions:
       - condition: state
