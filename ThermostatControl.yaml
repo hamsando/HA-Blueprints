@@ -154,7 +154,7 @@ actions:
                       entity_id: !input the_thermostats
               - conditions:
                   - condition: state
-                    entity_id: binary_sensor.hoarding_room_occupancy
+                    entity_id: !input occupancy_sensor
                     state: "on"
                 sequence:
                   - action: climate.set_temperature
@@ -189,7 +189,7 @@ actions:
                       entity_id: !input the_thermostats
               - conditions:
                   - condition: state
-                    entity_id: binary_sensor.hoarding_room_occupancy
+                    entity_id: !input occupancy_sensor
                     state: "on"
                 sequence:
                   - action: climate.set_temperature
