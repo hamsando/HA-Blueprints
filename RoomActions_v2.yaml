@@ -96,6 +96,7 @@ variables:
   _allLights: !input the_lights
   _allButLastAndNotification: "{{ _allLights | reject('eq', _lastLight) | reject ('eq', _notificationLight) | list }}"
   _allButNotification: "{{ _allLights | reject ('eq', _notificationLight) | list }}"
+  _transition: "{{ 15 if (now() - states.input_select.current_light_notification_type.last_changed) > timedelta(seconds = 3) else 0 }}"
 
 triggers:
   - trigger: state
@@ -129,18 +130,6 @@ actions:
             transition: 15        
           target: 
             entity_id: '{{ _allButLastAndNotification }}'
-        - choose:
-          - conditions:
-            - condition: state
-              entity_id: input_select.current_light_notification_type
-              state: "None"
-            sequence:
-              - action: light.turn_off
-                metadata: {}
-                data:
-                  transition: 15
-                target:
-                  entity_id: !input notification_light
         - action: switch.turn_off
           target: 
             entity_id: !input the_switches
@@ -168,7 +157,7 @@ actions:
                     - action: light.turn_off
                       metadata: {}
                       data:
-                        transition: 15
+                        transition: _transition
                       target:
                         entity_id: !input notification_light            
               - delay:
@@ -176,7 +165,7 @@ actions:
               - action: light.turn_off
                 metadata: {}
                 data:
-                  transition: 15
+                  transition: _transition
                 target:
                   entity_id: !input last_light
           default:
@@ -191,7 +180,7 @@ actions:
                   - action: light.turn_off
                     metadata: {}
                     data:
-                      transition: 15
+                      transition: _transition
                     target:
                       entity_id: !input last_light                   
     default:
