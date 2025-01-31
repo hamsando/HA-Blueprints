@@ -95,8 +95,7 @@ variables:
   _lastLight: !input last_light
   _allLights: !input the_lights
   _allButLastAndNotification: "{{ _allLights | reject('eq', _lastLight) | reject ('eq', _notificationLight) | list }}"
-  _allButNotification: "{{ _allLights | reject ('eq', _notificationLight) | list }}"
-  _transition: "{{ 15 if (now() - states.input_select.current_light_notification_type.last_changed) > timedelta(seconds = 3) else 0 }}"
+  _allButNotification: "{{ _allLights | reject ('eq', _notificationLight) | list }}"  
 
 triggers:
   - trigger: state
@@ -119,6 +118,8 @@ conditions:
         state: "off"
         
 actions:
+  - variables:
+      _transition: "{{ (15 if (now() - states.input_select.current_light_notification_type.last_changed) > timedelta(seconds = 3) else 0) | float }}"
   - choose:
     - conditions:
       - condition: state
