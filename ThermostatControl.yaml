@@ -52,7 +52,7 @@ blueprint:
         winter_low:    
           name: Target at night
           selector:
-           default: 19
+            default: 19
             number:
               min: 17
               max: 25
