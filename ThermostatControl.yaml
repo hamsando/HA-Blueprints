@@ -100,7 +100,7 @@ variables:
   _winterLow: !input winter_low
   _outside_temp_sensor: !input outside_temp
   _current_temp: "{{ states(_outside_temp_sensor) | float }}"
-  _offset: "{{ _current_temp + 1 if _current_temp <= 2 else 0 }}"
+  _offset: "{{ 1 if _current_temp <= -2 else 0 }}"
 
 triggers:
   - trigger: state
