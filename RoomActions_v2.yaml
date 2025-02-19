@@ -124,19 +124,23 @@ actions:
       - condition: state
         entity_id: !input occupancy_sensor
         state: "off"
-      sequence:
+      sequence:      
         - action: light.turn_off
+          continue_on_error: true
           data:
             transition: 15        
           target: 
             entity_id: '{{ _allButLastAndNotification }}'
         - action: switch.turn_off
+          continue_on_error: true
           target: 
             entity_id: !input the_switches
         - action: input_boolean.turn_off
+          continue_on_error: true
           target: 
             entity_id: !input the_booleans
         - action: script.turn_on
+          continue_on_error: true
           metadata: {}
           data:
             variables:
@@ -155,6 +159,7 @@ actions:
                     state: "None"
                   sequence:
                     - action: light.turn_off
+                      continue_on_error: true
                       metadata: {}
                       data:
                         transition: "{{_transition|float}}"
@@ -163,6 +168,7 @@ actions:
               - delay:
                   !input last_light_delay
               - action: light.turn_off
+                continue_on_error: true
                 metadata: {}
                 data:
                   transition: "{{_transition|float}}"
@@ -183,6 +189,7 @@ actions:
                         - delay:
                             !input last_light_delay
                   - action: light.turn_off
+                    continue_on_error: true
                     metadata: {}
                     data:
                       transition: "{{_transition|float}}"
@@ -190,6 +197,7 @@ actions:
                       entity_id: !input last_light                   
     default:
       - action: light.turn_on
+        continue_on_error: true
         metadata: {}
         data:
           color_temp_kelvin: !input the_light_temperature
@@ -203,6 +211,7 @@ actions:
             state: "None"
           sequence:
             - action: light.turn_on
+              continue_on_error: true
               metadata: {}
               data:
                 color_temp_kelvin: !input the_light_temperature
@@ -210,12 +219,15 @@ actions:
               target:
                 entity_id: !input notification_light          
       - action: switch.turn_on
+        continue_on_error: true
         target: 
           entity_id:  !input the_switches
       - action: input_boolean.turn_on
+        continue_on_error: true
         target: 
           entity_id:  !input the_booleans
       - action: script.turn_on
+        continue_on_error: true
         metadata: {}
         data: 
           variables:
