@@ -1,6 +1,6 @@
 blueprint:
   name: Advanced Presence to Occupancy
-  description: Combine single source presence to occupancy v6
+  description: Combine single source presence to occupancy v7
   domain: automation
   input:
     force_off_section:
@@ -108,7 +108,10 @@ triggers:
     entity_id: !input house_mode
     from: null
     to: null
-
+  - trigger: homeassistant
+    event: start
+    id: ha_restart
+    
 actions:
   - choose:
     - conditions:
@@ -142,8 +145,15 @@ actions:
         entity_id: !input house_mode
         state: "Sleeping"
       sequence:
-        - delay:
-            !input off_smoothing_delay      
+        - choose:
+            - conditions:
+                - condition: not
+                  conditions:
+                    - condition: trigger
+                      id:
+                        - ha_restat      
+              sequence:
+                - delay: !input off_smoothing_delay      
         - action: input_boolean.turn_off
           target:
             entity_id: !input input_boolean_helper
