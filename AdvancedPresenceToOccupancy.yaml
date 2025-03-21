@@ -151,7 +151,7 @@ actions:
                   conditions:
                     - condition: trigger
                       id:
-                        - ha_restat      
+                        - ha_restart      
               sequence:
                 - delay: !input off_smoothing_delay      
         - action: input_boolean.turn_off
