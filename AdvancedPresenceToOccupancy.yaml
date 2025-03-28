@@ -164,7 +164,7 @@ actions:
                       id:
                         - ha_restart      
               sequence:
-                - delay: "{{_off_delay}}"
+                - delay: !input off_smoothing_delay
         - action: input_boolean.turn_off
           target:
             entity_id: !input input_boolean_helper
