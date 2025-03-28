@@ -86,13 +86,7 @@ blueprint:
           selector:
             entity:
               filter:
-                - domain: input_boolean
-
-variables:
-  _off_smoothing_delay: !input off_smoothing_delay
-  _off_smoothing_delay_sleeping: !input off_smoothing_delay_sleeping
-  _off_delay: "{{ _off_smoothing_delay if states('input_select.house_mode')=='Awake' else _off_smoothing_delay_sleeping }}"
-  
+                - domain: input_boolean  
 triggers:
   - trigger: state
     entity_id: !input main_light_switch
