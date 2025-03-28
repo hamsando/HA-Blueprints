@@ -71,6 +71,12 @@ blueprint:
           default: 00:03:30
           selector:
             duration:
+        off_smoothing_delay_sleeping: 
+          name: Delay (when asleep)
+          description: How long to delay (when sleeping) after all triggers are OFF before indicating room is clear
+          default: 00:00:30
+          selector:
+            duration:            
     target_sensor_section:
       name: Helper Boolean
       input:
@@ -82,6 +88,11 @@ blueprint:
               filter:
                 - domain: input_boolean
 
+variables:
+  _off_smoothing_delay: !input off_smoothing_delay
+  _off_smoothing_delay_sleeping: !input off_smoothing_delay_sleeping
+  _off_delay: "{{ _off_smoothing_delay if states('input_select.house_mode')=="Awake" else _off_smoothing_delay_sleeping }}"
+  
 triggers:
   - trigger: state
     entity_id: !input main_light_switch
@@ -153,7 +164,7 @@ actions:
                       id:
                         - ha_restart      
               sequence:
-                - delay: !input off_smoothing_delay      
+                - delay: "{{_off_delay}}"
         - action: input_boolean.turn_off
           target:
             entity_id: !input input_boolean_helper
