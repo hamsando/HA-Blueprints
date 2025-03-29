@@ -1,6 +1,6 @@
 blueprint:
   name: Advanced Presence to Occupancy
-  description: Combine single source presence to occupancy v8
+  description: Combine single source presence to occupancy v8a
   domain: automation
   input:
     force_off_section:
@@ -101,7 +101,11 @@ triggers:
   - trigger: state
     entity_id: !input motion_sensors
     from: null
-    to: null
+    to: "off"
+  - trigger: state
+    entity_id: !input motion_sensors
+    from: null
+    to: "on"   
   - trigger: state
     entity_id: !input media_players
     from: null
