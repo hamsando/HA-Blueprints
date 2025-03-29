@@ -1,6 +1,6 @@
 blueprint:
   name: Advanced Presence to Occupancy
-  description: Combine single source presence to occupancy v7d
+  description: Combine single source presence to occupancy v8
   domain: automation
   input:
     force_off_section:
@@ -163,7 +163,7 @@ actions:
                       id:
                         - ha_restart      
               sequence:
-                - delay: !input off_smoothing_delay      
+                - delay: "{{_off_delay}}"
         - action: input_boolean.turn_off
           target:
             entity_id: !input input_boolean_helper
