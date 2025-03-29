@@ -1,6 +1,6 @@
 blueprint:
   name: Advanced Presence to Occupancy
-  description: Combine single source presence to occupancy v8a
+  description: Combine single source presence to occupancy v8b
   domain: automation
   input:
     force_off_section:
@@ -68,13 +68,13 @@ blueprint:
         off_smoothing_delay: 
           name: Delay
           description: How long to delay after all triggers are OFF before indicating room is clear
-          default: 00:03:30
+          default: "00:03:30"
           selector:
             duration:
         night_off_smoothing_delay: 
           name: Delay (Night)
           description: How long to delay (Night) after all triggers are OFF before indicating room is clear
-          default: 00:00:30
+          default: "00:00:30"
           selector:
             duration:        
     target_sensor_section:
