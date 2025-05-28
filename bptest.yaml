@@ -1,0 +1,16 @@
+blueprint:
+  name: My Test BP
+  description: Testing. V1
+  domain: script
+  input:
+    target_light:
+      name: Lights
+      description: The lights to keep in sync.
+      selector:
+        target:
+          entity:
+            - domain: input_boolean
+
+actions:
+  - action: input_boolean.turn_on
+    target: !input target_light
