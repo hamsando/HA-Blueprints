@@ -1,6 +1,6 @@
 blueprint:
   name: Basic Presence to Occupancy
-  description: Combine single source presence to occupancy v5
+  description: Combine single source presence to occupancy v5 - DEPRECATED
   domain: automation
   input:
     occupancy_sensor:
