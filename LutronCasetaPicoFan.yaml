@@ -6,6 +6,7 @@ blueprint:
     There is no Double Click for up/down as those are slower to respond and produce bad experience.
     
     Make sure you have enabled at least one Pico Event Entity for each device, they are default to not enabled as of 2023.3, otherwise they won't show up as an available device in the drop down list.
+    DEPRECATED
   domain: automation
   input:
     pico_id:
