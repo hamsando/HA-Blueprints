@@ -1,6 +1,6 @@
 blueprint:
   name: Lutron Caseta Pico 2-button Remote
-  description: Short and long press automations for the Pico 2-button remote
+  description: Short and long press automations for the Pico 2-button remote DEPRECATED
   domain: automation
   input:
     pico_remote:
