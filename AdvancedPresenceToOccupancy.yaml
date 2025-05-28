@@ -1,6 +1,6 @@
 blueprint:
   name: Advanced Presence to Occupancy
-  description: Combine single source presence to occupancy v8b
+  description: Combine single source presence to occupancy v8b - DEPRECATED
   domain: automation
   input:
     force_off_section:
