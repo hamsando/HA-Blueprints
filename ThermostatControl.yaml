@@ -1,6 +1,6 @@
 blueprint:
   name: Thermostat Control
-  description: Thermostat Automation.
+  description: Thermostat Automation. DEPRECATED
   domain: automation
   input:
     thermostat_section:
