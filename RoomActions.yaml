@@ -1,6 +1,6 @@
 blueprint:
   name: Room Actions based on Occupancy
-  description: Things to turn on or off based on room occupancy.
+  description: Things to turn on or off based on room occupancy. DEPRECATED
   domain: automation
   input:
     trigger_section:
