@@ -11,6 +11,6 @@ blueprint:
           entity:
             - domain: input_boolean
 
-actions:
+sequence:
   - action: input_boolean.turn_on
     target: !input target_light
